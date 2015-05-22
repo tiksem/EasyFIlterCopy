@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EasyFilter</string>
+    <string name="welcome">Welcome to Easy Filter</string>
+    <string name="pick">Pick your image</string>
 </resources>
