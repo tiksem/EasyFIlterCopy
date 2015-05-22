@@ -1,0 +1,6 @@
+[submodule "dependencies/general-utils"]
+	path = dependencies/general-utils
+	url = https://badmenltd@code.google.com/p/shalk-general/
+[submodule "dependencies/android-utils"]
+	path = dependencies/android-utils
+	url = https://badmenltd@code.google.com/p/shlak-android/
