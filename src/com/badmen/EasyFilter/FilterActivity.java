@@ -1,15 +1,13 @@
 package com.badmen.EasyFilter;
 
 import android.app.Activity;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
-import android.widget.ImageView;
+import android.widget.GridView;
 import com.utilsframework.android.threading.AsyncOperationCallback;
 import com.utilsframework.android.view.Alerts;
 import jp.co.cyberagent.android.gpuimage.GPUImageGrayscaleFilter;
@@ -55,9 +53,15 @@ public class FilterActivity extends Activity {
     }
 
     private void initViews(Bitmap bitmap) {
-        setContentView(R.layout.filter);
+        setContentView(R.layout.filter_activity);
+
         GPUImageView image = (GPUImageView) findViewById(R.id.image);
         image.setImage(bitmap);
         image.setFilter(new GPUImageGrayscaleFilter());
+
+        GridView filtersView = (GridView) findViewById(R.id.grid);
+        FilterAdapter filterAdapter = new FilterAdapter(this, bitmap);
+        filterAdapter.setElements(Filters.filters);
+        filtersView.setAdapter(filterAdapter);
     }
 }

@@ -3,4 +3,6 @@
     <color name="main">#4DB1BC</color>
     <color name="white">#ffffff</color>
     <color name="yellow">#fff000</color>
+    <color name="filters_activity_background_color">#ff111d27</color>
+    <color name="black">#000000</color>
 </resources>

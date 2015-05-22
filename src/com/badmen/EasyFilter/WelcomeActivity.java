@@ -35,7 +35,9 @@ public class WelcomeActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String selectedImagePath = ImageUtils.getSelectedImagePath(this, data);
-        FilterActivity.start(this, selectedImagePath);
+        if (resultCode == RESULT_OK) {
+            String selectedImagePath = ImageUtils.getSelectedImagePath(this, data);
+            FilterActivity.start(this, selectedImagePath);
+        }
     }
 }
