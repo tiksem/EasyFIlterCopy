@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.ImageView;
 import com.utilsframework.android.threading.AsyncOperationCallback;
 import com.utilsframework.android.view.Alerts;
+import jp.co.cyberagent.android.gpuimage.GPUImageGrayscaleFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImageView;
 
 /**
  * Created by semyon.tikhonenko on 22.05.2015.
@@ -54,7 +56,8 @@ public class FilterActivity extends Activity {
 
     private void initViews(Bitmap bitmap) {
         setContentView(R.layout.filter);
-        ImageView image = (ImageView) findViewById(R.id.image);
-        image.setImageBitmap(bitmap);
+        GPUImageView image = (GPUImageView) findViewById(R.id.image);
+        image.setImage(bitmap);
+        image.setFilter(new GPUImageGrayscaleFilter());
     }
 }
