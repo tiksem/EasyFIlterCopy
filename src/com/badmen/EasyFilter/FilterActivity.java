@@ -64,7 +64,7 @@ public class FilterActivity extends Activity {
 
         GridView filtersView = (GridView) findViewById(R.id.grid);
         FilterAdapter filterAdapter = new FilterAdapter(this, bitmap);
-        final List<Filter> filters = Filters.filters;
+        final List<Filter> filters = GPUImageFilterTools.getFilters(this);
         filterAdapter.setElements(filters);
         filtersView.setAdapter(filterAdapter);
 
