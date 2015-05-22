@@ -3,4 +3,5 @@
     <string name="app_name">EasyFilter</string>
     <string name="welcome">Welcome to Easy Filter</string>
     <string name="pick">Pick your image</string>
+    <string name="please_wait">Please wait...</string>
 </resources>

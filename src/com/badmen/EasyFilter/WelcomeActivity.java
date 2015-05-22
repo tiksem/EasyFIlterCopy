@@ -8,26 +8,26 @@ import android.view.View;
 import com.utilsframework.android.image.ImagePreviewActivity;
 import com.utilsframework.android.image.ImageUtils;
 
-public class MainActivity extends Activity {
+public class WelcomeActivity extends Activity {
     static final int GALLERY = 1;
     static final int CAMERA = 2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.welcome);
 
         findViewById(R.id.gallery).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageUtils.pickImageFromGallery(MainActivity.this, GALLERY);
+                ImageUtils.pickImageFromGallery(WelcomeActivity.this, GALLERY);
             }
         });
 
         findViewById(R.id.camera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageUtils.takeImageFromCamera(MainActivity.this, CAMERA);
+                ImageUtils.takeImageFromCamera(WelcomeActivity.this, CAMERA);
             }
         });
     }
@@ -36,6 +36,6 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         String selectedImagePath = ImageUtils.getSelectedImagePath(this, data);
-        ImagePreviewActivity.show(this, BitmapFactory.decodeFile(selectedImagePath));
+        FilterActivity.start(this, selectedImagePath);
     }
 }
