@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import com.utilsframework.android.threading.AsyncOperationCallback;
@@ -27,10 +28,16 @@ public class FilterActivity extends Activity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.filter, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        imagePath = getIntent().getStringExtra(IMAGE_PATH);
 
+        imagePath = getIntent().getStringExtra(IMAGE_PATH);
         Alerts.runAsyncOperationWithCircleLoading(this, R.string.please_wait,
                 new AsyncOperationCallback<Bitmap>() {
                     @Override
