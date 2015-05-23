@@ -122,7 +122,7 @@ public class GPUImageFilterTools {
             case HUE:
                 return new GPUImageHueFilter(90.0f);
             case BRIGHTNESS:
-                return new GPUImageBrightnessFilter(1.5f);
+                return new GPUImageBrightnessFilter(0.4f);
             case GRAYSCALE:
                 return new GPUImageGrayscaleFilter();
             case SEPIA:
