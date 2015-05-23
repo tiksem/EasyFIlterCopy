@@ -17,6 +17,7 @@ import android.widget.GridView;
 import android.widget.SeekBar;
 import com.utilsframework.android.bitmap.BitmapUtilities;
 import com.utilsframework.android.bitmap.Size;
+import com.utilsframework.android.file.FileUtils;
 import com.utilsframework.android.menu.MenuManager;
 import com.utilsframework.android.subscaleview.ScaleImagePreviewActivity;
 import com.utilsframework.android.threading.AsyncOperationCallback;
@@ -132,6 +133,13 @@ public class FilterActivity extends Activity {
                 image.requestRender();
             }
         });
+
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveImageForPreview();
+            }
+        });
     }
 
     private void showSaveAsAlert() {
@@ -155,14 +163,28 @@ public class FilterActivity extends Activity {
         saveImageAs(imagePath, false);
     }
 
-    private void saveImageAs(String fileName, boolean toPictures) {
-        final ProgressDialog progressDialog = Alerts.showCircleProgressDialog(this, getString(R.string.saving_image));
+    private void saveImageForPreview() {
+        File tempFile = FileUtils.createTempFile(this, "temp.jpg");
+        saveImageAs(tempFile.getAbsolutePath(), false, true);
+    }
+
+    private void saveImageAs(final String fileName, boolean toPictures) {
+        saveImageAs(fileName, toPictures, false);
+    }
+
+    private void saveImageAs(final String fileName, boolean toPictures, final boolean forPreview) {
+        String message = getString(forPreview ? R.string.generating_preview : R.string.saving_image);
+        final ProgressDialog progressDialog = Alerts.showCircleProgressDialog(this, message);
         Size size = BitmapUtilities.getBitmapDimensions(imagePath);
         GPUImageView.OnPictureSavedListener listener = new GPUImageView.OnPictureSavedListener() {
             @Override
             public void onPictureSaved(Uri uri) {
                 progressDialog.dismiss();
-                ScaleImagePreviewActivity.start(FilterActivity.this, uri);
+                if (!forPreview) {
+                    ScaleImagePreviewActivity.start(FilterActivity.this, uri);
+                } else {
+                    ScaleImagePreviewActivity.start(FilterActivity.this, fileName, true);
+                }
             }
         };
         if (toPictures) {

@@ -7,4 +7,5 @@
     <string name="saving_image">Saving image...</string>
     <string name="enter_file_name">Enter file name</string>
     <string name="save">Save</string>
+    <string name="generating_preview">Generation preview...</string>
 </resources>
