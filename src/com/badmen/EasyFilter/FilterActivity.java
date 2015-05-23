@@ -18,6 +18,7 @@ import android.widget.SeekBar;
 import com.utilsframework.android.bitmap.BitmapUtilities;
 import com.utilsframework.android.bitmap.Size;
 import com.utilsframework.android.menu.MenuManager;
+import com.utilsframework.android.subscaleview.ScaleImagePreviewActivity;
 import com.utilsframework.android.threading.AsyncOperationCallback;
 import com.utilsframework.android.view.Alerts;
 import com.utilsframework.android.view.UiMessages;
@@ -147,6 +148,7 @@ public class FilterActivity extends Activity {
                     @Override
                     public void onPictureSaved(Uri uri) {
                         progressDialog.dismiss();
+                        ScaleImagePreviewActivity.start(FilterActivity.this, uri);
                     }
                 });
     }

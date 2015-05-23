@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.utilsframework.android.image.ImagePreviewActivity"
+        <activity android:name="com.utilsframework.android.subscaleview.ScaleImagePreviewActivity"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                   android:label="@string/app_name">
         </activity>
         <activity android:name=".FilterActivity"
