@@ -13,5 +13,12 @@
     <item android:id="@+id/action_save"
           android:title=""
           android:icon="@drawable/save"
-          android:showAsAction="collapseActionView|ifRoom"/>
+          android:showAsAction="collapseActionView|ifRoom">
+        <menu>
+            <item android:id="@+id/save"
+                  android:title="Save"/>
+            <item android:id="@+id/saveAs"
+                  android:title="Save As"/>
+        </menu>
+    </item>
 </menu>

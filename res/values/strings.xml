@@ -4,4 +4,7 @@
     <string name="welcome">Welcome to Easy Filter</string>
     <string name="pick">Pick your image</string>
     <string name="please_wait">Please wait...</string>
+    <string name="saving_image">Saving image...</string>
+    <string name="enter_file_name">Enter file name</string>
+    <string name="save">Save</string>
 </resources>

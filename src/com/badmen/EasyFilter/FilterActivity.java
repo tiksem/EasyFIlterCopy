@@ -1,6 +1,7 @@
 package com.badmen.EasyFilter;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,11 +10,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SeekBar;
 import com.utilsframework.android.bitmap.BitmapUtilities;
+import com.utilsframework.android.bitmap.Size;
+import com.utilsframework.android.menu.MenuManager;
 import com.utilsframework.android.threading.AsyncOperationCallback;
 import com.utilsframework.android.view.Alerts;
 import com.utilsframework.android.view.UiMessages;
@@ -21,6 +25,7 @@ import jp.co.cyberagent.android.gpuimage.GPUImage;
 import jp.co.cyberagent.android.gpuimage.GPUImageGrayscaleFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageView;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -44,6 +49,13 @@ public class FilterActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.filter, menu);
+        menu.findItem(R.id.saveAs).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                showSaveAsAlert();
+                return true;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -112,6 +124,31 @@ public class FilterActivity extends Activity {
                 image.requestRender();
             }
         });
+    }
+
+    private void showSaveAsAlert() {
+        Alerts.InputAlertSettings settings = new Alerts.InputAlertSettings();
+        settings.message = getString(R.string.enter_file_name);
+        settings.okButtonText = getString(R.string.save);
+        settings.onInputOk = new Alerts.OnInputOk() {
+            @Override
+            public void onOk(String value) {
+                saveImageAs(value + ".jpg");
+            }
+        };
+        Alerts.showAlertWithInput(this, settings);
+    }
+
+    private void saveImageAs(String fileName) {
+        final ProgressDialog progressDialog = Alerts.showCircleProgressDialog(this, getString(R.string.saving_image));
+        Size size = BitmapUtilities.getBitmapDimensions(imagePath);
+        image.saveToPictures("Easy Filter", fileName,
+                size.width, size.height, new GPUImageView.OnPictureSavedListener() {
+                    @Override
+                    public void onPictureSaved(Uri uri) {
+                        progressDialog.dismiss();
+                    }
+                });
     }
 
     void generateSamples() {
