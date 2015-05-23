@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.widget.SeekBar;
 import com.utilsframework.android.bitmap.BitmapUtilities;
 import com.utilsframework.android.bitmap.Size;
 import com.utilsframework.android.file.FileUtils;
-import com.utilsframework.android.menu.MenuManager;
 import com.utilsframework.android.subscaleview.ScaleImagePreviewActivity;
 import com.utilsframework.android.threading.AsyncOperationCallback;
 import com.utilsframework.android.view.Alerts;
@@ -50,6 +48,7 @@ public class FilterActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.filter, menu);
+
         menu.findItem(R.id.saveAs).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -57,6 +56,7 @@ public class FilterActivity extends Activity {
                 return true;
             }
         });
+
         menu.findItem(R.id.save).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -64,6 +64,25 @@ public class FilterActivity extends Activity {
                 return true;
             }
         });
+
+        menu.findItem(R.id.action_undo).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                GPUImageFilter filter = filterGroup.undo();
+                updateFilter(filterGroup.getTopFilter(), filter);
+                return true;
+            }
+        });
+
+        menu.findItem(R.id.action_redo).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                GPUImageFilter filter = filterGroup.redo();
+                updateFilter(filterGroup.getTopFilter(), filter);
+                return true;
+            }
+        });
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -85,6 +104,12 @@ public class FilterActivity extends Activity {
                         initViews(result);
                     }
                 });
+    }
+
+    private void updateAdjuster(GPUImageFilter filter) {
+        filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
+        seekBar.setVisibility(filterAdjuster.canAdjust() ? View.VISIBLE : View.INVISIBLE);
+        seekBar.setProgress(50);
     }
 
     private void initViews(Bitmap bitmap) {
@@ -126,11 +151,7 @@ public class FilterActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Filter filter = filters.get(position);
                 GPUImageFilter gpuImageFilter = filterGroup.addFilter(filter.filter);
-                filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter.filter);
-                seekBar.setVisibility(filterAdjuster.canAdjust() ? View.VISIBLE : View.INVISIBLE);
-                seekBar.setProgress(50);
-                image.setFilter(gpuImageFilter);
-                image.requestRender();
+                updateFilter(filter.filter, gpuImageFilter);
             }
         });
 
@@ -140,6 +161,12 @@ public class FilterActivity extends Activity {
                 saveImageForPreview();
             }
         });
+    }
+
+    private void updateFilter(GPUImageFilter topFilter, GPUImageFilter groupFilter) {
+        updateAdjuster(topFilter);
+        image.setFilter(groupFilter);
+        image.requestRender();
     }
 
     private void showSaveAsAlert() {

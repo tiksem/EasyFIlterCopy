@@ -127,4 +127,13 @@ public class GPUImageLevelsFilter extends GPUImageFilter{
     public void setBlueMin(float min, float mid , float max ){
         setBlueMin(min, mid, max, 0, 1);
     }
+
+    public float getAverageMid() {
+        float sum = 0.0f;
+        for (float value : mMid) {
+            sum += value;
+        }
+
+        return sum / mMid.length;
+    }
 }

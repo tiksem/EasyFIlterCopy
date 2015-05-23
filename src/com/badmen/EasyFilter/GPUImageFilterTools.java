@@ -16,9 +16,7 @@
 
 package com.badmen.EasyFilter;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import jp.co.cyberagent.android.gpuimage.*;
@@ -135,7 +133,7 @@ public class GPUImageFilterTools {
                 return new GPUImageSobelEdgeDetection();
             case THREE_X_THREE_CONVOLUTION:
                 GPUImage3x3ConvolutionFilter convolution = new GPUImage3x3ConvolutionFilter();
-                convolution.setConvolutionKernel(new float[] {
+                convolution.setConvolutionKernel(new float[]{
                         -1.0f, 0.0f, 1.0f,
                         -2.0f, 0.0f, 2.0f,
                         -1.0f, 0.0f, 1.0f
@@ -156,9 +154,9 @@ public class GPUImageFilterTools {
             case EXPOSURE:
                 return new GPUImageExposureFilter(0.0f);
             case HIGHLIGHT_SHADOW:
-            	return new GPUImageHighlightShadowFilter(0.0f, 1.0f);
+                return new GPUImageHighlightShadowFilter(0.0f, 1.0f);
             case MONOCHROME:
-            	return new GPUImageMonochromeFilter(1.0f, new float[]{0.6f, 0.45f, 0.3f, 1.0f});
+                return new GPUImageMonochromeFilter(1.0f, new float[]{0.6f, 0.45f, 0.3f, 1.0f});
             case OPACITY:
                 return new GPUImageOpacityFilter(1.0f);
             case RGB:
@@ -169,7 +167,7 @@ public class GPUImageFilterTools {
                 PointF centerPoint = new PointF();
                 centerPoint.x = 0.5f;
                 centerPoint.y = 0.5f;
-                return new GPUImageVignetteFilter(centerPoint, new float[] {0.0f, 0.0f, 0.0f}, 0.3f, 0.75f);
+                return new GPUImageVignetteFilter(centerPoint, new float[]{0.0f, 0.0f, 0.0f}, 0.3f, 0.75f);
             case TONE_CURVE:
                 GPUImageToneCurveFilter toneCurveFilter = new GPUImageToneCurveFilter();
                 toneCurveFilter.setFromCurveFileInputStream(
@@ -419,6 +417,20 @@ public class GPUImageFilterTools {
             protected int range(final int percentage, final int start, final int end) {
                 return (end - start) * percentage / 100 + start;
             }
+
+            protected int progress(int current, final int start, final int end) {
+                int diff = end - start;
+                double k = 100.0 / diff;
+                return (int) Math.round((current - start) * k);
+            }
+
+            protected int progress(float current, final float start, final float end) {
+                float diff = end - start;
+                float k = 100.0f / diff;
+                return Math.round((current - start) * k);
+            }
+
+            public abstract int getProgress();
         }
 
         private class SharpnessAdjuster extends Adjuster<GPUImageSharpenFilter> {
@@ -426,26 +438,46 @@ public class GPUImageFilterTools {
             public void adjust(final int percentage) {
                 getFilter().setSharpness(range(percentage, -4.0f, 4.0f));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getSharpness(), -4.0f, 4.0f);
+            }
         }
 
         private class PixelationAdjuster extends Adjuster<GPUImagePixelationFilter> {
-          @Override
-          public void adjust(final int percentage) {
-              getFilter().setPixel(range(percentage, 1.0f, 100.0f));
-          }
+            @Override
+            public void adjust(final int percentage) {
+                getFilter().setPixel(range(percentage, 1.0f, 100.0f));
+            }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class HueAdjuster extends Adjuster<GPUImageHueFilter> {
-          @Override
-          public void adjust(final int percentage) {
-            getFilter().setHue(range(percentage, 0.0f, 360.0f));
-          }
+            @Override
+            public void adjust(final int percentage) {
+                getFilter().setHue(range(percentage, 0.0f, 360.0f));
+            }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class ContrastAdjuster extends Adjuster<GPUImageContrastFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setContrast(range(percentage, 0.0f, 2.0f));
+            }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
             }
         }
 
@@ -454,12 +486,22 @@ public class GPUImageFilterTools {
             public void adjust(final int percentage) {
                 getFilter().setGamma(range(percentage, 0.0f, 3.0f));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class BrightnessAdjuster extends Adjuster<GPUImageBrightnessFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setBrightness(range(percentage, -1.0f, 1.0f));
+            }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
             }
         }
 
@@ -468,6 +510,11 @@ public class GPUImageFilterTools {
             public void adjust(final int percentage) {
                 getFilter().setIntensity(range(percentage, 0.0f, 2.0f));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class SobelAdjuster extends Adjuster<GPUImageSobelEdgeDetection> {
@@ -475,12 +522,22 @@ public class GPUImageFilterTools {
             public void adjust(final int percentage) {
                 getFilter().setLineSize(range(percentage, 0.0f, 5.0f));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class EmbossAdjuster extends Adjuster<GPUImageEmbossFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setIntensity(range(percentage, 0.0f, 4.0f));
+            }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
             }
         }
 
@@ -490,12 +547,22 @@ public class GPUImageFilterTools {
                 // In theorie to 256, but only first 50 are interesting
                 getFilter().setColorLevels(range(percentage, 1, 50));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class GPU3x3TextureAdjuster extends Adjuster<GPUImage3x3TextureSamplingFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setLineSize(range(percentage, 0.0f, 5.0f));
+            }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
             }
         }
 
@@ -504,38 +571,63 @@ public class GPUImageFilterTools {
             public void adjust(final int percentage) {
                 getFilter().setSaturation(range(percentage, 0.0f, 2.0f));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
-        
+
         private class ExposureAdjuster extends Adjuster<GPUImageExposureFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setExposure(range(percentage, -10.0f, 10.0f));
             }
-        }   
-        
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
+        }
+
         private class HighlightShadowAdjuster extends Adjuster<GPUImageHighlightShadowFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setShadows(range(percentage, 0.0f, 1.0f));
                 getFilter().setHighlights(range(percentage, 0.0f, 1.0f));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
-        
+
         private class MonochromeAdjuster extends Adjuster<GPUImageMonochromeFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setIntensity(range(percentage, 0.0f, 1.0f));
                 //getFilter().setColor(new float[]{0.6f, 0.45f, 0.3f, 1.0f});
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
-        
+
         private class OpacityAdjuster extends Adjuster<GPUImageOpacityFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setOpacity(range(percentage, 0.0f, 1.0f));
             }
-        }   
-        
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
+        }
+
         private class RGBAdjuster extends Adjuster<GPUImageRGBFilter> {
             @Override
             public void adjust(final int percentage) {
@@ -543,13 +635,23 @@ public class GPUImageFilterTools {
                 //getFilter().setGreen(range(percentage, 0.0f, 1.0f));
                 //getFilter().setBlue(range(percentage, 0.0f, 1.0f));
             }
-        }   
-        
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
+        }
+
         private class WhiteBalanceAdjuster extends Adjuster<GPUImageWhiteBalanceFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setTemperature(range(percentage, 2000.0f, 8000.0f));
                 //getFilter().setTint(range(percentage, -100.0f, 100.0f));
+            }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
             }
         }
 
@@ -558,6 +660,11 @@ public class GPUImageFilterTools {
             public void adjust(final int percentage) {
                 getFilter().setVignetteStart(range(percentage, 0.0f, 1.0f));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class DissolveBlendAdjuster extends Adjuster<GPUImageDissolveBlendFilter> {
@@ -565,12 +672,22 @@ public class GPUImageFilterTools {
             public void adjust(final int percentage) {
                 getFilter().setMix(range(percentage, 0.0f, 1.0f));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class GaussianBlurAdjuster extends Adjuster<GPUImageGaussianBlurFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setBlurSize(range(percentage, 0.0f, 1.0f));
+            }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
             }
         }
 
@@ -580,6 +697,11 @@ public class GPUImageFilterTools {
                 getFilter().setCrossHatchSpacing(range(percentage, 0.0f, 0.06f));
                 getFilter().setLineWidth(range(percentage, 0.0f, 0.006f));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class BulgeDistortionAdjuster extends Adjuster<GPUImageBulgeDistortionFilter> {
@@ -588,12 +710,22 @@ public class GPUImageFilterTools {
                 getFilter().setRadius(range(percentage, 0.0f, 1.0f));
                 getFilter().setScale(range(percentage, -1.0f, 1.0f));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class GlassSphereAdjuster extends Adjuster<GPUImageGlassSphereFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setRadius(range(percentage, 0.0f, 1.0f));
+            }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
             }
         }
 
@@ -603,6 +735,11 @@ public class GPUImageFilterTools {
                 getFilter().setDistance(range(percentage, -0.3f, 0.3f));
                 getFilter().setSlope(range(percentage, -0.3f, 0.3f));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class SphereRefractionAdjuster extends Adjuster<GPUImageSphereRefractionFilter> {
@@ -610,12 +747,22 @@ public class GPUImageFilterTools {
             public void adjust(final int percentage) {
                 getFilter().setRadius(range(percentage, 0.0f, 1.0f));
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class SwirlAdjuster extends Adjuster<GPUImageSwirlFilter> {
             @Override
             public void adjust(final int percentage) {
                 getFilter().setAngle(range(percentage, 0.0f, 2.0f));
+            }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
             }
         }
 
@@ -628,12 +775,22 @@ public class GPUImageFilterTools {
                         range(percentage / 2, 0.0f, 1.0f),
                         range(percentage / 3, 0.0f, 1.0f)});
             }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+            }
         }
 
         private class LevelsMinMidAdjuster extends Adjuster<GPUImageLevelsFilter> {
             @Override
             public void adjust(int percentage) {
-                getFilter().setMin(0.0f, range(percentage, 0.0f, 1.0f) , 1.0f);
+                getFilter().setMin(0.0f, range(percentage, 0.0f, 1.0f), 1.0f);
+            }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getAverageMid(), 0.0f, 1.0f);
             }
         }
     }
