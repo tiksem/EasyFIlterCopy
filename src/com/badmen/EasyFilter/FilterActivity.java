@@ -23,9 +23,7 @@ import com.utilsframework.android.subscaleview.ScaleImagePreviewActivity;
 import com.utilsframework.android.threading.AsyncOperationCallback;
 import com.utilsframework.android.view.Alerts;
 import com.utilsframework.android.view.UiMessages;
-import jp.co.cyberagent.android.gpuimage.GPUImage;
-import jp.co.cyberagent.android.gpuimage.GPUImageGrayscaleFilter;
-import jp.co.cyberagent.android.gpuimage.GPUImageView;
+import jp.co.cyberagent.android.gpuimage.*;
 
 import java.io.File;
 import java.util.List;
@@ -41,6 +39,7 @@ public class FilterActivity extends Activity {
     private List<Filter> filters;
     private GPUImageFilterTools.FilterAdjuster filterAdjuster;
     private SeekBar seekBar;
+    private FilterGroupManager filterGroup = new FilterGroupManager();
 
     public static void start(Context context, String imagePath) {
         Intent intent = new Intent(context, FilterActivity.class);
@@ -126,10 +125,11 @@ public class FilterActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Filter filter = filters.get(position);
-                image.setFilter(filter.filter);
+                GPUImageFilter gpuImageFilter = filterGroup.addFilter(filter.filter);
                 filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter.filter);
                 seekBar.setVisibility(filterAdjuster.canAdjust() ? View.VISIBLE : View.INVISIBLE);
                 seekBar.setProgress(50);
+                image.setFilter(gpuImageFilter);
                 image.requestRender();
             }
         });
