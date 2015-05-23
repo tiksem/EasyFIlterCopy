@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.SeekBar;
 import com.utilsframework.android.bitmap.BitmapUtilities;
 import com.utilsframework.android.threading.AsyncOperationCallback;
 import com.utilsframework.android.view.Alerts;
@@ -31,6 +32,8 @@ public class FilterActivity extends Activity {
     private String imagePath;
     private GPUImageView image;
     private List<Filter> filters;
+    private GPUImageFilterTools.FilterAdjuster filterAdjuster;
+    private SeekBar seekBar;
 
     public static void start(Context context, String imagePath) {
         Intent intent = new Intent(context, FilterActivity.class);
@@ -70,6 +73,28 @@ public class FilterActivity extends Activity {
         image = (GPUImageView) findViewById(R.id.image);
         image.setImage(bitmap);
 
+        seekBar = (SeekBar) findViewById(R.id.adjuster);
+        seekBar.setMax(100);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (filterAdjuster != null) {
+                    filterAdjuster.adjust(progress);
+                    image.requestRender();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         final GridView filtersView = (GridView) findViewById(R.id.grid);
         FilterAdapter filterAdapter = new FilterAdapter(this);
         filters = GPUImageFilterTools.getFilters(this);
@@ -81,6 +106,10 @@ public class FilterActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Filter filter = filters.get(position);
                 image.setFilter(filter.filter);
+                filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter.filter);
+                seekBar.setVisibility(filterAdjuster.canAdjust() ? View.VISIBLE : View.INVISIBLE);
+                seekBar.setProgress(50);
+                image.requestRender();
             }
         });
     }

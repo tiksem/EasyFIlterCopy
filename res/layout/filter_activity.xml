@@ -10,7 +10,9 @@
         android:layout_width="fill_parent"
         android:layout_weight="1"
         android:layout_height="0dp"/>
-
+    <SeekBar android:id="@+id/adjuster"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"/>
     <GridView android:id="@+id/grid"
               android:layout_margin="5dp"
               android:numColumns="3"
