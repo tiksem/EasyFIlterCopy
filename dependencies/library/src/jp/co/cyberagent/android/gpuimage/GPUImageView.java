@@ -206,6 +206,17 @@ public class GPUImageView extends FrameLayout {
         new SaveTask(folderName, fileName, width, height, listener).execute();
     }
 
+    public void saveImage(final String imagePath,
+                          int width, int height,
+                          final OnPictureSavedListener listener) {
+        new SaveTask(null, imagePath, width, height, listener).execute();
+    }
+
+    public void saveImage(final String imagePath,
+                          final OnPictureSavedListener listener) {
+        new SaveTask(null, imagePath, listener).execute();
+    }
+
     /**
      * Retrieve current image with filter applied and given size as Bitmap.
      *
@@ -422,9 +433,14 @@ public class GPUImageView extends FrameLayout {
         }
 
         private void saveImage(final String folderName, final String fileName, final Bitmap image) {
-            File path = Environment
-                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            File file = new File(path, folderName + "/" + fileName);
+            File file = null;
+            if (folderName != null) {
+                File path = Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                file = new File(path, folderName + "/" + fileName);
+            } else {
+                file = new File(fileName);
+            }
             try {
                 file.getParentFile().mkdirs();
                 image.compress(Bitmap.CompressFormat.JPEG, 80, new FileOutputStream(file));

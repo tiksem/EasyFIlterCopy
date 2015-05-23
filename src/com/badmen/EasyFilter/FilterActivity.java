@@ -57,6 +57,13 @@ public class FilterActivity extends Activity {
                 return true;
             }
         });
+        menu.findItem(R.id.save).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                saveImage();
+                return true;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -141,16 +148,29 @@ public class FilterActivity extends Activity {
     }
 
     private void saveImageAs(String fileName) {
+        saveImageAs(fileName, true);
+    }
+
+    private void saveImage() {
+        saveImageAs(imagePath, false);
+    }
+
+    private void saveImageAs(String fileName, boolean toPictures) {
         final ProgressDialog progressDialog = Alerts.showCircleProgressDialog(this, getString(R.string.saving_image));
         Size size = BitmapUtilities.getBitmapDimensions(imagePath);
-        image.saveToPictures("Easy Filter", fileName,
-                size.width, size.height, new GPUImageView.OnPictureSavedListener() {
-                    @Override
-                    public void onPictureSaved(Uri uri) {
-                        progressDialog.dismiss();
-                        ScaleImagePreviewActivity.start(FilterActivity.this, uri);
-                    }
-                });
+        GPUImageView.OnPictureSavedListener listener = new GPUImageView.OnPictureSavedListener() {
+            @Override
+            public void onPictureSaved(Uri uri) {
+                progressDialog.dismiss();
+                ScaleImagePreviewActivity.start(FilterActivity.this, uri);
+            }
+        };
+        if (toPictures) {
+            image.saveToPictures("Easy Filter", fileName,
+                    size.width, size.height, listener);
+        } else {
+            image.saveImage(fileName, size.width, size.height, listener);
+        }
     }
 
     void generateSamples() {
