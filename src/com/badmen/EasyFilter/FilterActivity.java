@@ -51,32 +51,27 @@ public class FilterActivity extends Activity {
         imagePath = getIntent().getStringExtra(IMAGE_PATH);
         Alerts.runAsyncOperationWithCircleLoading(this, R.string.please_wait,
                 new AsyncOperationCallback<Bitmap>() {
-                    Bitmap miniBitmap;
 
                     @Override
                     public Bitmap runOnBackground() {
-                        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sample);
-                        double k = Math.min(bitmap.getWidth() / 100.0, bitmap.getHeight() / 100.0);
-                        miniBitmap = BitmapUtilities.resizeExistingBitmap(bitmap, (int) (bitmap.getWidth() / k),
-                                (int) (bitmap.getHeight() / k));
-                        return bitmap;
+                        return BitmapFactory.decodeFile(imagePath);
                     }
 
                     @Override
                     public void onFinish(Bitmap result) {
-                        initViews(result, miniBitmap);
+                        initViews(result);
                     }
                 });
     }
 
-    private void initViews(Bitmap bitmap, Bitmap miniBitmap) {
+    private void initViews(Bitmap bitmap) {
         setContentView(R.layout.filter_activity);
 
         image = (GPUImageView) findViewById(R.id.image);
         image.setImage(bitmap);
 
         final GridView filtersView = (GridView) findViewById(R.id.grid);
-        FilterAdapter filterAdapter = new FilterAdapter(this, miniBitmap);
+        FilterAdapter filterAdapter = new FilterAdapter(this);
         filters = GPUImageFilterTools.getFilters(this);
         filterAdapter.setElements(filters);
         filtersView.setAdapter(filterAdapter);

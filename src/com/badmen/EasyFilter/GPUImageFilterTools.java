@@ -286,7 +286,7 @@ public class GPUImageFilterTools {
     private static GPUImageFilter createBlendFilter(Context context, Class<? extends GPUImageTwoInputFilter> filterClass) {
         try {
             GPUImageTwoInputFilter filter = filterClass.newInstance();
-            filter.setBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher));
+            filter.setBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.clouds));
             return filter;
         } catch (Exception e) {
             e.printStackTrace();
