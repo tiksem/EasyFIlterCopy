@@ -107,7 +107,7 @@ public class GPUImageFilterTools {
         return filters.filters;
     }
 
-    private static GPUImageFilter createFilterForType(final Context context, final FilterType type) {
+    public static GPUImageFilter createFilterForType(final Context context, final FilterType type) {
         switch (type) {
             case CONTRAST:
                 return new GPUImageContrastFilter(2.0f);
@@ -226,7 +226,7 @@ public class GPUImageFilterTools {
 
             case LOOKUP_AMATORKA:
                 GPUImageLookupFilter amatorka = new GPUImageLookupFilter();
-                amatorka.setBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.lookup_amatorka));
+                amatorka.setBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.amatorka));
                 return amatorka;
             case GAUSSIAN_BLUR:
                 return new GPUImageGaussianBlurFilter();
@@ -296,7 +296,7 @@ public class GPUImageFilterTools {
         void onGpuImageFilterChosenListener(GPUImageFilter filter);
     }
 
-    private enum FilterType {
+    public enum FilterType {
         CONTRAST, GRAYSCALE, SHARPEN, SEPIA, SOBEL_EDGE_DETECTION, THREE_X_THREE_CONVOLUTION, FILTER_GROUP, EMBOSS, POSTERIZE, GAMMA, BRIGHTNESS, INVERT, HUE, PIXELATION,
         SATURATION, EXPOSURE, HIGHLIGHT_SHADOW, MONOCHROME, OPACITY, RGB, WHITE_BALANCE, VIGNETTE, TONE_CURVE, BLEND_COLOR_BURN, BLEND_COLOR_DODGE, BLEND_DARKEN, BLEND_DIFFERENCE,
         BLEND_DISSOLVE, BLEND_EXCLUSION, BLEND_SOURCE_OVER, BLEND_HARD_LIGHT, BLEND_LIGHTEN, BLEND_ADD, BLEND_DIVIDE, BLEND_MULTIPLY, BLEND_OVERLAY, BLEND_SCREEN, BLEND_ALPHA,
@@ -380,6 +380,8 @@ public class GPUImageFilterTools {
                 adjuster = new ColorBalanceAdjuster().filter(filter);
             } else if (filter instanceof GPUImageLevelsFilter) {
                 adjuster = new LevelsMinMidAdjuster().filter(filter);
+            } else if (filter instanceof GPUImageLookupFilter) {
+                adjuster = new LookupFilterAdjuster().filter(filter);
             } else {
                 adjuster = null;
             }
@@ -795,6 +797,18 @@ public class GPUImageFilterTools {
             @Override
             public int getProgress() {
                 return progress(getFilter().getAverageMid(), 0.0f, 1.0f);
+            }
+        }
+
+        private class LookupFilterAdjuster extends Adjuster<GPUImageLookupFilter> {
+            @Override
+            public void adjust(int percentage) {
+                getFilter().setStrength(range(percentage, 0.0f, 1.0f));
+            }
+
+            @Override
+            public int getProgress() {
+                return progress(getFilter().getStrength(), 0.0f, 1.0f);
             }
         }
     }

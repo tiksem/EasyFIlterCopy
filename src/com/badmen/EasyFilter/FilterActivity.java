@@ -119,6 +119,7 @@ public class FilterActivity extends Activity {
 
         image = (GPUImageView) findViewById(R.id.image);
         image.setImage(bitmap);
+        image.setFilter(GPUImageFilterTools.createFilterForType(this, GPUImageFilterTools.FilterType.LOOKUP_AMATORKA));
 
         seekBar = (SeekBar) findViewById(R.id.adjuster);
         seekBar.setMax(100);
