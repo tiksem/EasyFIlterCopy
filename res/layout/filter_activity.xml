@@ -5,11 +5,28 @@
               android:weightSum="2"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <jp.co.cyberagent.android.gpuimage.GPUImageView
-        android:id="@+id/image"
-        android:layout_width="fill_parent"
-        android:layout_weight="1"
-        android:layout_height="0dp"/>
+    <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            >
+        <jp.co.cyberagent.android.gpuimage.GPUImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+        <Button android:id="@+id/preview"
+                android:layout_gravity="bottom|right"
+                android:layout_width="wrap_content"
+                android:text="@string/preview"
+                android:layout_height="wrap_content"/>
+        <Button android:id="@+id/apply_filter"
+                android:layout_gravity="bottom|left"
+                android:layout_width="wrap_content"
+                android:text="@string/apply_filter"
+                android:layout_height="wrap_content" />
+    </FrameLayout>
+
     <SeekBar android:id="@+id/adjuster"
              android:visibility="invisible"
                  android:layout_width="match_parent"

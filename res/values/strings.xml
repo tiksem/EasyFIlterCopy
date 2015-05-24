@@ -8,4 +8,7 @@
     <string name="enter_file_name">Enter file name</string>
     <string name="save">Save</string>
     <string name="generating_preview">Generation preview...</string>
+    <string name="preview">Preview</string>
+    <string name="apply_filter">Apply Filter</string>
+    <string name="filter_applies_message">Filter applied, select next filter</string>
 </resources>

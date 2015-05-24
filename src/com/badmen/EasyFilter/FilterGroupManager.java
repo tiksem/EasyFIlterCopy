@@ -15,6 +15,7 @@ public class FilterGroupManager {
     private List<GPUImageFilter> filters = new ArrayList<>();
     private int undoCount = 0;
     private GPUImageFilter lastFilter;
+    private boolean applyFilterRequested = false;
 
     public FilterGroupManager() {
     }
@@ -29,9 +30,27 @@ public class FilterGroupManager {
         return getImageFilter();
     }
 
+    public GPUImageFilter replaceTopFilter(GPUImageFilter filter) {
+        if (undoCount != 0 || filters.isEmpty()) {
+            return addFilter(filter);
+        }
+
+        CollectionUtils.setLast(filters, filter);
+        return getImageFilter();
+    }
+
+    public GPUImageFilter addOrReplaceFilter(GPUImageFilter filter) {
+        if (applyFilterRequested) {
+            applyFilterRequested = false;
+            return addFilter(filter);
+        } else {
+            return replaceTopFilter(filter);
+        }
+    }
+
     public GPUImageFilter undo() {
         if (undoCount == filters.size()) {
-            return getLastFilter();
+            return new GPUImageFilter();
         }
 
         undoCount++;
@@ -82,5 +101,9 @@ public class FilterGroupManager {
 
         lastFilter = result;
         return result;
+    }
+
+    public void applyFilter() {
+        applyFilterRequested = true;
     }
 }

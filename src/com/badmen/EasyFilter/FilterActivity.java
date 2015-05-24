@@ -152,15 +152,23 @@ public class FilterActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Filter filter = filters.get(position);
-                GPUImageFilter gpuImageFilter = filterGroup.addFilter(filter.filter);
+                GPUImageFilter gpuImageFilter = filterGroup.addOrReplaceFilter(filter.filter);
                 updateFilter(filter.filter, gpuImageFilter);
             }
         });
 
-        image.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.preview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveImageForPreview();
+            }
+        });
+
+        findViewById(R.id.apply_filter).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterGroup.applyFilter();
+                UiMessages.message(FilterActivity.this, R.string.filter_applies_message);
             }
         });
     }
