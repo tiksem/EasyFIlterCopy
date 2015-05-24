@@ -63,4 +63,8 @@ public class GPUImageExposureFilter extends GPUImageFilter {
         mExposure = exposure;
         setFloat(mExposureLocation, mExposure);
     }
+
+    public float getExposure() {
+        return mExposure;
+    }
 }

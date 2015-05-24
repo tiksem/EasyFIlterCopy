@@ -113,6 +113,10 @@ public class GPUImage3x3TextureSamplingFilter extends GPUImageFilter {
         updateTexelValues();
     }
 
+    public float getLineSize() {
+        return mLineSize;
+    }
+
     private void updateTexelValues() {
         setFloat(mUniformTexelWidthLocation, mTexelWidth);
         setFloat(mUniformTexelHeightLocation, mTexelHeight);

@@ -60,4 +60,8 @@ public class GPUImagePosterizeFilter extends GPUImageFilter {
         mColorLevels = colorLevels;
         setFloat(mGLUniformColorLevels, colorLevels);
     }
+
+    public int getColorLevels() {
+        return mColorLevels;
+    }
 }

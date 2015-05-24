@@ -63,4 +63,8 @@ public class GPUImageGammaFilter extends GPUImageFilter {
         mGamma = gamma;
         setFloat(mGammaLocation, mGamma);
     }
+
+    public float getGamma() {
+        return mGamma;
+    }
 }

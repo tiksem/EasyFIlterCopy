@@ -113,4 +113,8 @@ public class GPUImageGaussianBlurFilter extends GPUImageTwoPassTextureSamplingFi
             }
         });
     }
+
+    public float getBlurSize() {
+        return mBlurSize;
+    }
 }

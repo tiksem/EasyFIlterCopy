@@ -94,4 +94,8 @@ public class GPUImageHazeFilter extends GPUImageFilter {
         mSlope = slope;
         setFloat(mSlopeLocation, slope);
     }
+
+    public float getSlope() {
+        return mSlope;
+    }
 }

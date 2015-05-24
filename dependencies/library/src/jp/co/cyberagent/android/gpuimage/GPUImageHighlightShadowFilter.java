@@ -78,7 +78,11 @@ public class GPUImageHighlightShadowFilter extends GPUImageFilter {
         mHighlights = highlights;
         setFloat(mHighlightsLocation, mHighlights);
     }
-    
+
+    public float getHighlights() {
+        return mHighlights;
+    }
+
     public void setShadows(final float shadows) {
         mShadows = shadows;
         setFloat(mShadowsLocation, mShadows);

@@ -105,4 +105,8 @@ public class GPUImageVignetteFilter extends GPUImageFilter {
         mVignetteEnd = vignetteEnd;
         setFloat(mVignetteEndLocation, mVignetteEnd);
     }
+
+    public float getVignetteStart() {
+        return mVignetteStart;
+    }
 }

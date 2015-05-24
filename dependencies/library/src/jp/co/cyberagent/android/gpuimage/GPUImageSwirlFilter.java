@@ -114,4 +114,8 @@ public class GPUImageSwirlFilter extends GPUImageFilter {
         mCenter = center;
         setPoint(mCenterLocation, center);
     }
+
+    public float getAngle() {
+        return mAngle;
+    }
 }

@@ -124,4 +124,8 @@ public class GPUImageGlassSphereFilter extends GPUImageFilter {
         mRadius = radius;
         setFloat(mRadiusLocation, radius);
     }
+
+    public float getRadius() {
+        return mRadius;
+    }
 }

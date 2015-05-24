@@ -108,6 +108,10 @@ public class GPUImageBulgeDistortionFilter extends GPUImageFilter {
         setFloat(mRadiusLocation, radius);
     }
 
+    public float getRadius() {
+        return mRadius;
+    }
+
     /**
      * The amount of distortion to apply, from -1.0 to 1.0, with a default of 0.5
      *

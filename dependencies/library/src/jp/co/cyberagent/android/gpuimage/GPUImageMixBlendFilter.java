@@ -51,4 +51,8 @@ public class GPUImageMixBlendFilter extends GPUImageTwoInputFilter {
         mMix = mix;
         setFloat(mMixLocation, mMix);
     }
+
+    public float getMix() {
+        return mMix;
+    }
 }

@@ -67,4 +67,8 @@ public class GPUImageSobelEdgeDetection extends GPUImageFilterGroup {
     public void setLineSize(final float size) {
         ((GPUImage3x3TextureSamplingFilter) getFilters().get(1)).setLineSize(size);
     }
+
+    public float getLineSize() {
+        return ((GPUImage3x3TextureSamplingFilter) getFilters().get(1)).getLineSize();
+    }
 }

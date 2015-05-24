@@ -91,4 +91,8 @@ public class GPUImageRGBFilter extends GPUImageFilter {
             setFloat(mBlueLocation, mBlue);
         }
     }
+
+    public float getRed() {
+        return mRed;
+    }
 }

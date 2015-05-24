@@ -69,4 +69,8 @@ public class GPUImageSaturationFilter extends GPUImageFilter {
         mSaturation = saturation;
         setFloat(mSaturationLocation, mSaturation);
     }
+
+    public float getSaturation() {
+        return mSaturation;
+    }
 }

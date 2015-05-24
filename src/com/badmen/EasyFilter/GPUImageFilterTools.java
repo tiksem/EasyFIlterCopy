@@ -395,6 +395,10 @@ public class GPUImageFilterTools {
             }
         }
 
+        public int getProgress() {
+            return adjuster.getProgress();
+        }
+
         private abstract class Adjuster<T extends GPUImageFilter> {
             private T filter;
 
@@ -465,7 +469,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getmHue(), 0.0f, 360.0f);
             }
         }
 
@@ -477,7 +481,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getContrast(), 0.0f, 2.0f);
             }
         }
 
@@ -489,7 +493,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getGamma(), 0.0f, 3.0f);
             }
         }
 
@@ -501,7 +505,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getBrightness(), -1.0f, 1.0f);
             }
         }
 
@@ -513,7 +517,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getIntensity(), 0.0f, 2.0f);
             }
         }
 
@@ -525,7 +529,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getLineSize(), 0.0f, 5.0f);
             }
         }
 
@@ -537,7 +541,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getIntensity(), 0.0f, 4.0f);
             }
         }
 
@@ -550,7 +554,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getColorLevels(), 1, 50);
             }
         }
 
@@ -562,7 +566,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getLineSize(), 0.0f, 5.0f);
             }
         }
 
@@ -574,7 +578,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getSaturation(), 0.0f, 2.0f);
             }
         }
 
@@ -586,7 +590,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getExposure(), -10.0f, 10.0f);
             }
         }
 
@@ -599,7 +603,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getHighlights(), 0.0f, 1.0f);
             }
         }
 
@@ -612,7 +616,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getIntensity(), 0.0f, 1.0f);
             }
         }
 
@@ -624,7 +628,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getOpacity(), 0.0f, 1.0f);
             }
         }
 
@@ -638,7 +642,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getRed(), 0.0f, 1.0f);
             }
         }
 
@@ -651,7 +655,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getTemperature(), 2000.0f, 8000.0f);
             }
         }
 
@@ -663,7 +667,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getVignetteStart(), 0.0f, 1.0f);
             }
         }
 
@@ -675,7 +679,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getMix(), 0.0f, 1.0f);
             }
         }
 
@@ -687,7 +691,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getBlurSize(), 0.0f, 1.0f);
             }
         }
 
@@ -700,7 +704,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getCrossHatchSpacing(), 0.0f, 0.06f);
             }
         }
 
@@ -713,7 +717,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getRadius(), 0.0f, 1.0f);
             }
         }
 
@@ -725,7 +729,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getRadius(), 0.0f, 1.0f);
             }
         }
 
@@ -738,7 +742,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getSlope(), -0.3f, 0.3f);
             }
         }
 
@@ -750,7 +754,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getRadius(), 0.0f, 1.0f);
             }
         }
 
@@ -762,7 +766,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getAngle(), 0.0f, 20.0f);
             }
         }
 
@@ -778,7 +782,7 @@ public class GPUImageFilterTools {
 
             @Override
             public int getProgress() {
-                return progress(getFilter().getPixel(), 1.0f, 100.0f);
+                return progress(getFilter().getProgress(), 0.0f, 1.0f);
             }
         }
 

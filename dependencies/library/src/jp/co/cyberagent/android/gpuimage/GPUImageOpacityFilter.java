@@ -64,4 +64,8 @@ public class GPUImageOpacityFilter extends GPUImageFilter {
         mOpacity = opacity;
         setFloat(mOpacityLocation, mOpacity);
     }
+
+    public float getOpacity() {
+        return mOpacity;
+    }
 }

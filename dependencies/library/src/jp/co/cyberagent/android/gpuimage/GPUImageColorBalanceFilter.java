@@ -194,4 +194,8 @@ public class GPUImageColorBalanceFilter extends GPUImageFilter {
         this.preserveLuminosity = preserveLuminosity;
         setInteger(mPreserveLuminosityLocation, preserveLuminosity ? 1: 0);
     }
+
+    public float getProgress() {
+        return midtones[0];
+    }
 }

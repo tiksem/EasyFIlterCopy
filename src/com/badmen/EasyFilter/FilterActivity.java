@@ -109,7 +109,9 @@ public class FilterActivity extends Activity {
     private void updateAdjuster(GPUImageFilter filter) {
         filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
         seekBar.setVisibility(filterAdjuster.canAdjust() ? View.VISIBLE : View.INVISIBLE);
-        seekBar.setProgress(50);
+        if (filterAdjuster.canAdjust()) {
+            seekBar.setProgress(filterAdjuster.getProgress());
+        }
     }
 
     private void initViews(Bitmap bitmap) {

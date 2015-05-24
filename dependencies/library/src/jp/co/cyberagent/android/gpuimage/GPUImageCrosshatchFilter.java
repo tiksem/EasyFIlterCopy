@@ -118,6 +118,10 @@ public class GPUImageCrosshatchFilter extends GPUImageFilter {
         setFloat(mCrossHatchSpacingLocation, mCrossHatchSpacing);
     }
 
+    public float getCrossHatchSpacing() {
+        return mCrossHatchSpacing;
+    }
+
     /**
      * A relative width for the crosshatch lines. The default is 0.003.
      *

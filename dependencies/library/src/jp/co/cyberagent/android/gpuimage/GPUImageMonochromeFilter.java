@@ -88,7 +88,11 @@ public class GPUImageMonochromeFilter extends GPUImageFilter {
         mIntensity = intensity;
         setFloat(mIntensityLocation, mIntensity);
     }
-    
+
+    public float getIntensity() {
+        return mIntensity;
+    }
+
     public void setColor(final float[] color) {
         mColor = color;
         setColorRed(mColor[0], mColor[1], mColor[2]);
