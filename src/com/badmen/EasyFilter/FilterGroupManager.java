@@ -75,11 +75,12 @@ public class FilterGroupManager {
     }
 
     public GPUImageFilter getTopFilter() {
-        if (filters.isEmpty()) {
+        int index = filters.size() - 1 - undoCount;
+        if (index < 0) {
             return new GPUImageFilter();
         }
 
-        return CollectionUtils.getLast(filters);
+        return filters.get(index);
     }
 
     private GPUImageFilter getImageFilter() {
