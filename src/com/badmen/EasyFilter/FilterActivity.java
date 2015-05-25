@@ -31,6 +31,7 @@ import java.util.List;
  */
 public class FilterActivity extends Activity {
     private static final String IMAGE_PATH = "imagePath";
+    private static final boolean GENERATE_SAMPLES = false;
 
     private String imagePath;
     private GPUImageView image;
@@ -118,8 +119,11 @@ public class FilterActivity extends Activity {
         setContentView(R.layout.filter_activity);
 
         image = (GPUImageView) findViewById(R.id.image);
+        if (GENERATE_SAMPLES) {
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sample);
+        }
+
         image.setImage(bitmap);
-        image.setFilter(GPUImageFilterTools.createFilterForType(this, GPUImageFilterTools.FilterType.LOOKUP_AMATORKA));
 
         seekBar = (SeekBar) findViewById(R.id.adjuster);
         seekBar.setMax(100);
@@ -146,32 +150,37 @@ public class FilterActivity extends Activity {
         final GridView filtersView = (GridView) findViewById(R.id.grid);
         FilterAdapter filterAdapter = new FilterAdapter(this);
         filters = GPUImageFilterTools.getFilters(this);
-        filterAdapter.setElements(filters);
-        filtersView.setAdapter(filterAdapter);
 
-        filtersView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Filter filter = filters.get(position);
-                GPUImageFilter gpuImageFilter = filterGroup.addOrReplaceFilter(filter.filter);
-                updateFilter(filter.filter, gpuImageFilter);
-            }
-        });
+        if (!GENERATE_SAMPLES) {
+            filterAdapter.setElements(filters);
+            filtersView.setAdapter(filterAdapter);
 
-        findViewById(R.id.preview).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveImageForPreview();
-            }
-        });
+            filtersView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Filter filter = filters.get(position);
+                    GPUImageFilter gpuImageFilter = filterGroup.addOrReplaceFilter(filter.filter);
+                    updateFilter(filter.filter, gpuImageFilter);
+                }
+            });
 
-        findViewById(R.id.apply_filter).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterGroup.applyFilter();
-                UiMessages.message(FilterActivity.this, R.string.filter_applies_message);
-            }
-        });
+            findViewById(R.id.preview).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveImageForPreview();
+                }
+            });
+
+            findViewById(R.id.apply_filter).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    filterGroup.applyFilter();
+                    UiMessages.message(FilterActivity.this, R.string.filter_applies_message);
+                }
+            });
+        } else {
+            generateSamples();
+        }
     }
 
     private void updateFilter(GPUImageFilter topFilter, GPUImageFilter groupFilter) {
@@ -254,6 +263,6 @@ public class FilterActivity extends Activity {
                     UiMessages.message(FilterActivity.this, "finished");
                 }
             }
-        };
+        }.run();
     }
 }
