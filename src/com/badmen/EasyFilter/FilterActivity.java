@@ -97,6 +97,7 @@ public class FilterActivity extends Activity {
 
                     @Override
                     public Bitmap runOnBackground() {
+                        filters = GPUImageFilterTools.getFilters(FilterActivity.this);
                         return BitmapFactory.decodeFile(imagePath);
                     }
 
@@ -111,7 +112,9 @@ public class FilterActivity extends Activity {
         filterAdjuster = new GPUImageFilterTools.FilterAdjuster(filter);
         seekBar.setVisibility(filterAdjuster.canAdjust() ? View.VISIBLE : View.INVISIBLE);
         if (filterAdjuster.canAdjust()) {
-            seekBar.setProgress(filterAdjuster.getProgress());
+            int progress = filterAdjuster.getProgress();
+            seekBar.setProgress(progress);
+            adjustFilter(progress);
         }
     }
 
@@ -125,15 +128,20 @@ public class FilterActivity extends Activity {
 
         image.setImage(bitmap);
 
+        if (!GENERATE_SAMPLES) {
+            initFilterEditing();
+        } else {
+            generateSamples();
+        }
+    }
+
+    private void initFilterEditing() {
         seekBar = (SeekBar) findViewById(R.id.adjuster);
         seekBar.setMax(100);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (filterAdjuster != null) {
-                    filterAdjuster.adjust(progress);
-                    image.requestRender();
-                }
+                adjustFilter(progress);
             }
 
             @Override
@@ -149,43 +157,45 @@ public class FilterActivity extends Activity {
 
         final GridView filtersView = (GridView) findViewById(R.id.grid);
         FilterAdapter filterAdapter = new FilterAdapter(this);
-        filters = GPUImageFilterTools.getFilters(this);
 
-        if (!GENERATE_SAMPLES) {
-            filterAdapter.setElements(filters);
-            filtersView.setAdapter(filterAdapter);
+        filterAdapter.setElements(filters);
+        filtersView.setAdapter(filterAdapter);
 
-            filtersView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Filter filter = filters.get(position);
-                    GPUImageFilter gpuImageFilter = filterGroup.addOrReplaceFilter(filter.filter);
-                    updateFilter(filter.filter, gpuImageFilter);
-                }
-            });
+        filtersView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Filter filter = filters.get(position);
+                GPUImageFilter gpuImageFilter = filterGroup.addOrReplaceFilter(filter.filter);
+                updateFilter(filter.filter, gpuImageFilter);
+            }
+        });
 
-            findViewById(R.id.preview).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    saveImageForPreview();
-                }
-            });
+        findViewById(R.id.preview).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveImageForPreview();
+            }
+        });
 
-            findViewById(R.id.apply_filter).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    filterGroup.applyFilter();
-                    UiMessages.message(FilterActivity.this, R.string.filter_applies_message);
-                }
-            });
-        } else {
-            generateSamples();
+        findViewById(R.id.apply_filter).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterGroup.applyFilter();
+                UiMessages.message(FilterActivity.this, R.string.filter_applies_message);
+            }
+        });
+    }
+
+    private void adjustFilter(int progress) {
+        if (filterAdjuster != null) {
+            filterAdjuster.adjust(progress);
+            image.requestRender();
         }
     }
 
     private void updateFilter(GPUImageFilter topFilter, GPUImageFilter groupFilter) {
-        updateAdjuster(topFilter);
         image.setFilter(groupFilter);
+        updateAdjuster(topFilter);
         image.requestRender();
     }
 

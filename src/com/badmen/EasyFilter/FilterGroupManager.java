@@ -35,6 +35,10 @@ public class FilterGroupManager {
             return addFilter(filter);
         }
 
+        if (filter == getTopFilter()) {
+            return getLastFilter();
+        }
+
         CollectionUtils.setLast(filters, filter);
         return getImageFilter();
     }
