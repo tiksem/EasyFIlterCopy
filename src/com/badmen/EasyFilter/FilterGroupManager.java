@@ -88,21 +88,12 @@ public class FilterGroupManager {
     }
 
     private GPUImageFilter getImageFilter() {
-        int index = 0;
         int last = filters.size() - undoCount - 1;
         if (last < 0) {
             return new GPUImageFilter();
         }
 
-        GPUImageFilterGroup result = new GPUImageFilterGroup();
-        for (GPUImageFilter gpuImageFilter : filters) {
-            if (index > last) {
-                break;
-            }
-
-            result.addFilter(gpuImageFilter);
-            index++;
-        }
+        GPUImageFilterGroup result = new GPUImageFilterGroup(new ArrayList<>(filters.subList(0, last + 1)));
 
         lastFilter = result;
         return result;
