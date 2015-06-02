@@ -16,11 +16,13 @@
                 android:layout_height="match_parent"
                 />
         <Button android:id="@+id/preview"
+                android:visibility="gone"
                 android:layout_gravity="bottom|right"
                 android:layout_width="wrap_content"
                 android:text="@string/preview"
                 android:layout_height="wrap_content"/>
         <Button android:id="@+id/apply_filter"
+                android:visibility="gone"
                 android:layout_gravity="bottom|left"
                 android:layout_width="wrap_content"
                 android:text="@string/apply_filter"

@@ -36,7 +36,6 @@ public class GPUImageFilterTools {
         final FilterList filters = new FilterList(context);
         filters.addFilter("Contrast", new GPUImageContrastFilter(2.0f));
         filters.addFilter("Invert", new GPUImageColorInvertFilter());
-        filters.addFilter("Pixelation", new GPUImagePixelationFilter());
         filters.addFilter("Hue", new GPUImageHueFilter(90.0f));
         filters.addFilter("Gamma", new GPUImageGammaFilter(2.0f));
         filters.addFilter("Brightness", new GPUImageBrightnessFilter(0.4f));
@@ -46,12 +45,6 @@ public class GPUImageFilterTools {
         sharpness.setSharpness(2.0f);
         filters.addFilter("Sharpness", sharpness);
         filters.addFilter("Sobel Edge Detection", new GPUImageSobelEdgeDetection());
-        GPUImage3x3ConvolutionFilter convolution = new GPUImage3x3ConvolutionFilter();
-        convolution.setConvolutionKernel(new float[]{
-                -1.0f, 0.0f, 1.0f,
-                -2.0f, 0.0f, 2.0f,
-                -1.0f, 0.0f, 1.0f
-        });
 
         try {
             AssetManager assets = context.getAssets();
@@ -66,19 +59,12 @@ public class GPUImageFilterTools {
             throw new RuntimeException(e);
         }
 
-        filters.addFilter("3x3 Convolution", convolution);
         filters.addFilter("Emboss", new GPUImageEmbossFilter());
         filters.addFilter("Posterize", new GPUImagePosterizeFilter());
-        List<GPUImageFilter> groupFilters = new LinkedList<GPUImageFilter>();
-        groupFilters.add(new GPUImageContrastFilter());
-        groupFilters.add(new GPUImageDirectionalSobelEdgeDetectionFilter());
-        groupFilters.add(new GPUImageGrayscaleFilter());
-        filters.addFilter("Grouped filters", new GPUImageFilterGroup(groupFilters));
         filters.addFilter("Saturation", new GPUImageSaturationFilter(1.0f));
         filters.addFilter("Exposure", new GPUImageExposureFilter(0.0f));
         filters.addFilter("Highlight Shadow", new GPUImageHighlightShadowFilter(0.0f, 1.0f));
         filters.addFilter("Monochrome", new GPUImageMonochromeFilter(1.0f, new float[]{0.6f, 0.45f, 0.3f, 1.0f}));
-        filters.addFilter("Opacity", new GPUImageOpacityFilter(1.0f));
         filters.addFilter("RGB", new GPUImageRGBFilter(1.0f, 1.0f, 1.0f));
         filters.addFilter("White Balance", new GPUImageWhiteBalanceFilter(5000.0f, 0.0f));
         PointF centerPoint = new PointF();
@@ -89,19 +75,14 @@ public class GPUImageFilterTools {
         GPUImageToneCurveFilter toneCurveFilter = new GPUImageToneCurveFilter();
         toneCurveFilter.setFromCurveFileInputStream(
                 context.getResources().openRawResource(R.raw.tone_cuver_sample));
-        filters.addFilter("ToneCurve", toneCurveFilter);
-
-        filters.addFilter("Blend (Difference)", createBlendFilter(context, GPUImageDifferenceBlendFilter.class));
-        filters.addFilter("Blend (Source Over)", createBlendFilter(context, GPUImageSourceOverBlendFilter.class));
+        filters.addFilter("Tone Curve", toneCurveFilter);
 
         GPUImageLookupFilter amatorka = new GPUImageLookupFilter();
         amatorka.setBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.amatorka));
-        filters.addFilter("Lookup (Amatorka)", amatorka);
+        filters.addFilter("Amatorka", amatorka);
         filters.addFilter("Gaussian Blur", new GPUImageGaussianBlurFilter());
-        filters.addFilter("Crosshatch", new GPUImageCrosshatchFilter());
 
         filters.addFilter("Box Blur", new GPUImageBoxBlurFilter());
-        filters.addFilter("CGA Color Space", new GPUImageCGAColorspaceFilter());
         filters.addFilter("Dilation", new GPUImageDilationFilter());
         filters.addFilter("Kuwahara", new GPUImageKuwaharaFilter());
         filters.addFilter("RGB Dilation", new GPUImageRGBDilationFilter());
@@ -110,21 +91,18 @@ public class GPUImageFilterTools {
         filters.addFilter("Smooth Toon", new GPUImageSmoothToonFilter());
 
         filters.addFilter("Bulge Distortion", new GPUImageBulgeDistortionFilter());
-        filters.addFilter("Glass Sphere", new GPUImageGlassSphereFilter());
         filters.addFilter("Haze", new GPUImageHazeFilter());
-        filters.addFilter("Laplacian", new GPUImageLaplacianFilter());
-        filters.addFilter("Non Maximum Suppression",
-                new GPUImageNonMaximumSuppressionFilter());
-        filters.addFilter("Sphere Refraction", new GPUImageSphereRefractionFilter());
         filters.addFilter("Swirl", new GPUImageSwirlFilter());
-        filters.addFilter("Weak Pixel Inclusion", new GPUImageWeakPixelInclusionFilter());
-        filters.addFilter("False Color", new GPUImageFalseColorFilter());
 
         filters.addFilter("Color Balance", new GPUImageColorBalanceFilter());
 
         GPUImageLevelsFilter levelsFilter = new GPUImageLevelsFilter();
         levelsFilter.setMin(0.0f, 3.0f, 1.0f);
-        filters.addFilter("Levels Min (Mid Adjust)", levelsFilter);
+        filters.addFilter("Levels Adjust", levelsFilter);
+
+        GPUImagePixelationFilter pixelationFilter = new GPUImagePixelationFilter();
+        pixelationFilter.setPixel(5.0f);
+        filters.addFilter("Pixelation", pixelationFilter);
 
         return filters.filters;
     }
