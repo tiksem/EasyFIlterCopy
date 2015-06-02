@@ -456,7 +456,7 @@ public class GPUImageView extends FrameLayout {
 
                                         @Override
                                         public void run() {
-                                            mListener.onPictureSaved(uri);
+                                            mListener.onPictureSaved(uri, image);
                                         }
                                     });
                                 }
@@ -469,6 +469,6 @@ public class GPUImageView extends FrameLayout {
     }
 
     public interface OnPictureSavedListener {
-        void onPictureSaved(Uri uri);
+        void onPictureSaved(Uri uri, Bitmap bitmap);
     }
 }

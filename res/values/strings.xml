@@ -11,4 +11,6 @@
     <string name="preview">Preview</string>
     <string name="apply_filter">Apply Filter</string>
     <string name="filter_applies_message">Filter applied, select next filter</string>
+    <string name="save_image_confirm">Do you want to save? It will replace the original image.</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -20,6 +20,7 @@ import com.utilsframework.android.file.FileUtils;
 import com.utilsframework.android.subscaleview.ScaleImagePreviewActivity;
 import com.utilsframework.android.threading.AsyncOperationCallback;
 import com.utilsframework.android.view.Alerts;
+import com.utilsframework.android.view.OnYes;
 import com.utilsframework.android.view.UiMessages;
 import jp.co.cyberagent.android.gpuimage.*;
 
@@ -217,7 +218,19 @@ public class FilterActivity extends Activity {
     }
 
     private void saveImage() {
-        saveImageAs(imagePath, false);
+        Alerts.YesNoAlertSettings settings = new Alerts.YesNoAlertSettings();
+        settings.message = getString(R.string.save_image_confirm);
+        settings.noButtonText = getString(R.string.cancel);
+        settings.yesButtonText = getString(R.string.save);
+
+        settings.onYes = new OnYes() {
+            @Override
+            public void onYes() {
+                saveImageAs(imagePath, false);
+            }
+        };
+
+        Alerts.showYesNoAlert(this, settings);
     }
 
     private void saveImageForPreview() {
@@ -235,13 +248,16 @@ public class FilterActivity extends Activity {
         Size size = BitmapUtilities.getBitmapDimensions(imagePath);
         GPUImageView.OnPictureSavedListener listener = new GPUImageView.OnPictureSavedListener() {
             @Override
-            public void onPictureSaved(Uri uri) {
+            public void onPictureSaved(Uri uri, Bitmap bitmap) {
                 progressDialog.dismiss();
                 if (!forPreview) {
                     ScaleImagePreviewActivity.start(FilterActivity.this, uri);
                 } else {
                     ScaleImagePreviewActivity.start(FilterActivity.this, fileName, true);
                 }
+                imagePath = BitmapUtilities.getFromMediaUri(getContentResolver(), uri).getAbsolutePath();
+                image.setImage(bitmap);
+                image.setFilter(new GPUImageFilter());
             }
         };
         if (toPictures) {
@@ -264,7 +280,7 @@ public class FilterActivity extends Activity {
                     image.saveToPictures("samples", "sample_" + i + ".jpg", 100, 100,
                             new GPUImageView.OnPictureSavedListener() {
                                 @Override
-                                public void onPictureSaved(Uri uri) {
+                                public void onPictureSaved(Uri uri, Bitmap bitmap) {
                                     i++;
                                     run();
                                 }
