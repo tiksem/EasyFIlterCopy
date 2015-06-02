@@ -257,7 +257,8 @@ public class FilterActivity extends Activity {
                 }
                 imagePath = BitmapUtilities.getFromMediaUri(getContentResolver(), uri).getAbsolutePath();
                 image.setImage(bitmap);
-                image.setFilter(new GPUImageFilter());
+                GPUImageFilter filter = new GPUImageFilter();
+                updateFilter(filter, filter);
             }
         };
         if (toPictures) {
