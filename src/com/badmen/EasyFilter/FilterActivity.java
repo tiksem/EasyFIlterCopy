@@ -17,6 +17,7 @@ import android.widget.SeekBar;
 import com.utilsframework.android.bitmap.BitmapUtilities;
 import com.utilsframework.android.bitmap.Size;
 import com.utilsframework.android.file.FileUtils;
+import com.utilsframework.android.social.SocialUtils;
 import com.utilsframework.android.subscaleview.ScaleImagePreviewActivity;
 import com.utilsframework.android.threading.AsyncOperationCallback;
 import com.utilsframework.android.view.Alerts;
@@ -81,6 +82,14 @@ public class FilterActivity extends Activity {
             public boolean onMenuItemClick(MenuItem item) {
                 GPUImageFilter filter = filterGroup.redo();
                 updateFilter(filterGroup.getTopFilter(), filter);
+                return true;
+            }
+        });
+
+        menu.findItem(R.id.publishOnInstagram).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                SocialUtils.postOnInstagram(FilterActivity.this, imagePath);
                 return true;
             }
         });
